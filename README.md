@@ -23,15 +23,14 @@ devtools::install_github("virmar/finnishgrid")
 
 ## Free API registration
 
-Read basic API specification at <https://data.fingrid.fi/en/pages/api>.
+Read basic API specification at
+<https://data.fingrid.fi/en/instructions> and register free user
+account.
 
-Register free user account at
-<https://data.fingrid.fi/open-data-forms/registration/>.
-
-Optional: add API key as your environment variable (\~/.Renviron)
+Optional: add API key as your environment variable (~/.Renviron)
 
 ``` bash
-FINGRID_OPENDATA_API_KEY=MY_SECRET_KEY_FROM_EMAIL
+FINGRID_OPENDATA_API_KEY=MY_SECRET_KEY_FROM_API_PAGES
 ```
 
 ## Example
@@ -41,21 +40,23 @@ time-series data for basic visualization.
 
 ``` r
 library(finnishgrid)
-start_time = "2021-01-01T00:00:00+0200"
-end_time = "2021-01-03T00:00:00+0200"
+start_time_utc = "2024-06-01T00:00:00.000Z"
+end_time_utc = "2024-06-03T00:00:00.000Z"
 user_key = NA  # TODO: replace with right key or use .Renviron file
 ```
 
 ## Fetching data with helper functions
 
 ``` r
-elec_cons <- electricity_consumption_FI_RTD(start_time = start_time, 
-                                            end_time = end_time, 
+elec_cons <- powersys_electricity_consumption_FI_RTD(start_time_utc = start_time_utc,
+                                            end_time_utc = end_time_utc,
                                             user_key = user_key)
+Sys.sleep(1)
 
-elec_prod <- electricity_production_FI_RTD(start_time = start_time, 
-                                           end_time = end_time, 
+elec_prod <- powersys_electricity_production_FI_RTD(start_time_utc = start_time_utc,
+                                           end_time_utc = end_time_utc,
                                            user_key = user_key)
+Sys.sleep(1)
 
 min_elec_cons <- min(elec_cons$value)  # consumption
 max_elec_cons <- max(elec_cons$value)
@@ -73,36 +74,36 @@ y_min <- min(min_elec_cons, min_elec_prod)
 plot(elec_cons$start_time, elec_cons$value, type = 'l',
      col = "green", ylim = c(y_min, y_max),
      ylab = "Produced/Consumed (MW)",
-     xlab = "Time", main = "Electricity")
+     xlab = "Time", main = "Electricity",
+     sub = "Data source Fingrid / data.fingrid.fi, license CC 4.0 BY")
 lines(elec_prod$start_time, elec_prod$value, type = 'l', col = "blue")
 legend("topright", c("Cons", "Prod"), fill = c("green", "blue"))
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-figs-fg-readme-1.png" width="100%" />
 
 ## Get electricity consumption in Finland with get_data() function
 
-API page:
-<https://data.fingrid.fi/en/dataset/electricity-consumption-in-finland>
+API page: <https://data.fingrid.fi/en/datasets/124>
 
 ``` r
-tmp <- get_data(api_number = 124,  # energy consumption
-                start_time = start_time, 
-                end_time = end_time, 
+tmp <- get_data(api_number = 193,  # energy consumption
+                start_time = start_time_utc, 
+                end_time = end_time_utc, 
                 user_key = NA)
 summary(tmp)
-#>    start_time                     end_time                       value      
-#>  Min.   :2021-01-01 00:00:00   Min.   :2021-01-01 01:00:00   Min.   : 8972  
-#>  1st Qu.:2021-01-01 12:00:00   1st Qu.:2021-01-01 13:00:00   1st Qu.: 9309  
-#>  Median :2021-01-02 00:00:00   Median :2021-01-02 01:00:00   Median : 9861  
-#>  Mean   :2021-01-02 00:00:00   Mean   :2021-01-02 01:00:00   Mean   : 9856  
-#>  3rd Qu.:2021-01-02 12:00:00   3rd Qu.:2021-01-02 13:00:00   3rd Qu.:10318  
-#>  Max.   :2021-01-03 00:00:00   Max.   :2021-01-03 01:00:00   Max.   :11018  
+#>  start_time_utc                 end_time_utc                     value     
+#>  Min.   :2024-06-01 00:00:00   Min.   :2024-06-01 00:03:00   Min.   :6434  
+#>  1st Qu.:2024-06-01 11:59:15   1st Qu.:2024-06-01 12:02:15   1st Qu.:6914  
+#>  Median :2024-06-01 23:58:30   Median :2024-06-02 00:01:30   Median :7441  
+#>  Mean   :2024-06-01 23:58:30   Mean   :2024-06-02 00:01:30   Mean   :7347  
+#>  3rd Qu.:2024-06-02 11:57:45   3rd Qu.:2024-06-02 12:00:45   3rd Qu.:7726  
+#>  Max.   :2024-06-02 23:57:00   Max.   :2024-06-03 00:00:00   Max.   :8166  
 #>        id     
-#>  Min.   :124  
-#>  1st Qu.:124  
-#>  Median :124  
-#>  Mean   :124  
-#>  3rd Qu.:124  
-#>  Max.   :124
+#>  Min.   :193  
+#>  1st Qu.:193  
+#>  Median :193  
+#>  Mean   :193  
+#>  3rd Qu.:193  
+#>  Max.   :193
 ```

@@ -4,38 +4,38 @@
 \alias{electricity_consumption_FI}
 \title{Electricity consumption in Finland}
 \usage{
-electricity_consumption_FI(start_time = NA, end_time = NA, user_key = NA)
+electricity_consumption_FI(
+  start_time_utc = NA,
+  end_time_utc = NA,
+  user_key = NA
+)
 }
 \arguments{
-\item{start_time}{Start time in UTC with offset. Character array in ISO8601,
-YYYY-MM-ddTHH:mm:ssZ}
+\item{start_time_utc}{Start time in UTC. Character array YYYY-MM-ddTHH:mm:ss.sssZ}
 
-\item{end_time}{End time in UTC with offset. Character array in ISO8601,
-YYYY-MM-ddTHH:mm:ssZ}
+\item{end_time_utc}{End time in UTC. Character array YYYY-MM-ddTHH:mm:ss.sssZ}
 
 \item{user_key}{Character array holding API-key.
-Free from https://data.fingrid.fi/open-data-forms/registration/}
+Free from https://data.fingrid.fi/en/instructions}
 }
 \value{
-A data frame object that contains electricity consumption in
-Finland is based on Fingrid's production measurements. Minor part of
-production which is not measured is estimated. The consumption is
-calculated as follows: Consumption = Production + Import - Export.
-Updated hourly.
+A data frame object with time series data having period 15 min and unit type MWh/h.
 }
 \description{
-Check https://data.fingrid.fi/en/dataset/electricity-consumption-in-finland
+The values in the data have been erroneously instantaneous values. From February 21, 2024, the data are correct 15-minute averages.Average data can be found correctly on the European transparency platform: https://transparency.entsoe.eu/load-domain/r2/totalLoadR2/showElectricity consumption in Finland is based on Fingrid's production measurements. Minor part of production which is not measured is estimated. The consumption is calculated as follows:Consumption = Production + Import - Export. The average shown every quarter is the average of the past quarter, i.e. the value coming with a time stamp of 14:15 is the average from 14:00-14:15. The Data before 13.06.2023 is in hourly resolution.
 }
 \examples{
 \dontrun{
 library(finnishgrid)
-start = "2021-01-01T00:00:00+0200"  # UTC+2 offset, Helsinki time
-end = "2021-01-10T00:00:00+0200"    # UTC+2 offset, Helsinki time
+start = "2024-06-01T00:00:00.000Z"  # UTC
+end = "2024-06-03T00:00:00.000Z"    # UTC
 key = "MY_SUPER_SECRET"
-df <- electricity_consumption_FI(
-    start_time = start,
-    end_time = end,
-    user_key = key)
+df <- electricity_consumption_FI(start_time_utc = start,
+         end_time_utc = end,
+         user_key = key)
 summary(df)
 }
+}
+\seealso{
+https://data.fingrid.fi/en/datasets/124
 }

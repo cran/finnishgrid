@@ -2,36 +2,36 @@
 % Please edit documentation in R/finnishgrid.R
 \name{congestion_income_FI_SE3}
 \alias{congestion_income_FI_SE3}
-\title{Congestion income between FI and SE3}
+\title{Congestion income between FI-SE3}
 \usage{
-congestion_income_FI_SE3(start_time = NA, end_time = NA, user_key = NA)
+congestion_income_FI_SE3(start_time_utc = NA, end_time_utc = NA, user_key = NA)
 }
 \arguments{
-\item{start_time}{Start time in UTC with offset. Character array in ISO8601,
-YYYY-MM-ddTHH:mm:ssZ}
+\item{start_time_utc}{Start time in UTC. Character array YYYY-MM-ddTHH:mm:ss.sssZ}
 
-\item{end_time}{End time in UTC with offset. Character array in ISO8601,
-YYYY-MM-ddTHH:mm:ssZ}
+\item{end_time_utc}{End time in UTC. Character array YYYY-MM-ddTHH:mm:ss.sssZ}
 
 \item{user_key}{Character array holding API-key.
-Free from https://data.fingrid.fi/open-data-forms/registration/}
+Free from https://data.fingrid.fi/en/instructions}
 }
 \value{
-A data frame object that contains congestion income between
-Finland (FI) and Central Sweden (SE3).
+A data frame object with time series data having period 1 h and unit type EUR.
 }
 \description{
-Check https://data.fingrid.fi/en/dataset/congestion-income-between-fi-se3
+Congestion income between Finland (FI) and Central Sweden (SE3). __Congestion income is published on ENTSO-E's Transparency Platform, which can be founded here: https://transparency.entsoe.eu/transmission/r2/dailyImplicitAllocationsCongestionIncome/show .There are historical values to be found from Open Data until the beginning of February 2017. After February 2017 updated data as well as historical data can be founded from ENTSO-E's Transparency Platform.__Congestion income = commercial flow between FI and SE3 on the day ahead market (MWh/h) * absolute value of price difference between FI and SE3 (/MWh).Congestion originates in the situation where transmission capacity between bidding zones is not sufficient to fulfill the market demand and the congestion splits the bidding zones into separate price areas. Congestion income arises from the different prices that the sellers receive and the buyers pay when electricity flows from the higher price area to the lower price area. The seller acting in a lower price area receives lower price for electricity compared to the price the other party pays for electricity in the higher price area, and the power exchange receives surplus income, which it then pays to the Transmission System Operators (TSOs). The TSOs spend the received congestion income on increasing the transmission capacity on its cross-border interconnectors according to the EU regulation.
 }
 \examples{
 \dontrun{
 library(finnishgrid)
-start = "2021-01-01T00:00:00+0200"  # UTC+2 offset, Helsinki time
-end = "2021-01-10T00:00:00+0200"    # UTC+2 offset, Helsinki time
+start = "2024-06-01T00:00:00.000Z"  # UTC
+end = "2024-06-03T00:00:00.000Z"    # UTC
 key = "MY_SUPER_SECRET"
-df <- congestion_income_FI_SE3(start_time = start,
-    end_time = end,
-    user_key = key)
+df <- congestion_income_FI_SE3(start_time_utc = start,
+         end_time_utc = end,
+         user_key = key)
 summary(df)
 }
+}
+\seealso{
+https://data.fingrid.fi/en/datasets/71
 }
